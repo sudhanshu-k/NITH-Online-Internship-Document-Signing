@@ -1,7 +1,7 @@
 package database
 
 import (
-	"log"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"os"
 
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
@@ -14,12 +14,11 @@ func ConnectDB() {
 
 	env := os.Getenv("DATABASE_URL")
 	DB, err = gorm.Open(postgres.Open(env), &gorm.Config{})
-	
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	middleware.LogIfError(err, "Failed to connect to DB")
+	println("Connection succesful to DB")
+
 	err = DB.AutoMigrate(&model.Student{}, &model.Faculty{}, &model.Profile{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	middleware.FatalError(err)
+	println("Migrated DB")
 }

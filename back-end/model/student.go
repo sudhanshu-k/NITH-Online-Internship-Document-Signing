@@ -7,9 +7,9 @@ import (
 )
 
 type Student struct {
-	ID        guuid.UUID `gorm:"primaryKey" json:"-"`
+	ID        guuid.UUID `gorm:"type:uuid" json:"-"`
 	FirstName string     `json:"firstname"`
-	LasttName string     `json:"lastname"`
+	LastName string     `json:"lastname"`
 	Email     string     `json:"email"`
 	Password  string     `json:"-"`
 	// Sessions  []Session  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`

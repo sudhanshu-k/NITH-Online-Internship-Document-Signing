@@ -7,9 +7,9 @@ import (
 )
 
 type Faculty struct {
-	ID        uuid.UUID `gorm:"primaryKey" json:"-"`
+	ID        uuid.UUID `gorm:"type:uuid" json:"-"`
 	FirstName string    `json:"firstname"`
-	LasttName string    `json:"lastname"`
+	LastName string    `json:"lastname"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-"`
 	Level     int8      `json:"-"`
