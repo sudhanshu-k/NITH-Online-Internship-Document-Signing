@@ -1,0 +1,44 @@
+.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 9999;
+	border-bottom: 1px solid dimgrey;
+	background-color: white;
+	height: 60px;
+}
+
+.navbar-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.title {
+	color: dimgray;
+	text-decoration: none;
+}
+
+.navbar-profile {
+	display: flex;
+	align-items: center;
+}
+
+.navbar-profile > * {
+	margin: 0.5em;
+}
+
+.account-icon {
+	color: dimgray;
+}
+
+.account-name {
+	color: dimgray;
+	font-weight: 500;
+	letter-spacing: 0.15em;
+}
