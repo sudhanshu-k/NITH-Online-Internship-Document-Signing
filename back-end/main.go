@@ -3,23 +3,23 @@ package main
 import (
 	// errors "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/router"
 
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/joho/godotenv/autoload"
-	// "gorm.io/gorm"
 )
 
 func main() {
+	//new fiber instance
 	app := fiber.New()
 
+	//connect to db
 	database.ConnectDB()
 
-	app.Get("/", func(c *fiber.Ctx) error{
-		err:=c.SendString("Api Is Up, Testing Route");
-		return err
-	})
+	// Setup the router
+	router.SetupRoutes(app)
 
-	app.Listen(":"+os.Getenv("PORT"))
+	app.Listen(":" + os.Getenv("PORT"))
 }

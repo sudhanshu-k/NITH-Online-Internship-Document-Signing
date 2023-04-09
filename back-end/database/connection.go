@@ -18,7 +18,7 @@ func ConnectDB() {
 	middleware.LogIfError(err, "Failed to connect to DB")
 	println("Connection succesful to DB")
 
-	err = DB.AutoMigrate(&model.Student{}, &model.Faculty{}, &model.Profile{})
+	err = DB.AutoMigrate(&model.Student{}, &model.Faculty{}, &model.Profile{}, &model.Session{})
 	middleware.FatalError(err)
 	println("Migrated DB")
 }
