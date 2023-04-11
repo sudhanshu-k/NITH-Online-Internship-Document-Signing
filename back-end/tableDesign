@@ -1,0 +1,15 @@
+users
+    id          uiid    pk
+    firstname   string
+    lastname    string
+    email       string  unique
+    password    string
+    createdAt   time
+    updatedAt   time
+
+teachers
+    id      uiid    pk/fk
+    level   int
+
+form
+    corresponding fields

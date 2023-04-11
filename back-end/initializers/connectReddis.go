@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
 
 var (
@@ -21,10 +21,10 @@ func ConnectRedis(config *Config) {
 	})
 
 	_, err := RedisClient.Ping(ctx).Result()
-	middleware.LogIfError(err, "Reddis ping failed.")
+	utils.LogIfError(err, "Reddis ping failed.")
 
 	err = RedisClient.Set(ctx, "API", "e-sign application", 0).Err()
-	middleware.FatalError(err)
+	utils.FatalError(err)
 
 	fmt.Println("Redis Connected")
 }

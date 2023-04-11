@@ -17,3 +17,14 @@ type Student struct {
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"-" `
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"-"`
 }
+
+func FilterUserRecord(user *Student) Student {
+	return Student{
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+}
