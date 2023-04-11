@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { AppBar } from "@mui/material";
 
 const Navbar = () => {
 	return (
@@ -14,10 +13,10 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="navbar-profile">
-					<Link>
+					<Link className="profile-container" to={"/profile-st"}>
 						<AccountCircleIcon className="account-icon" fontSize="large" />
+						<p className="account-name">UserName</p>
 					</Link>
-					<p className="account-name">UserName</p>
 				</div>
 			</div>
 		</nav>

@@ -1,0 +1,7 @@
+.dashboard-body {
+	margin-left: 10vw;
+	margin-top: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+}
