@@ -56,29 +56,29 @@ func ValidateToken(token string, publicKey string) (*TokenDetails, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not decode: %w", err)
 	}
-
+	fmt.Println("hereI")
 	key, err := jwt.ParseRSAPublicKeyFromPEM(decodedPublicKey)
-
+	fmt.Println("hereI")
 	if err != nil {
 		return nil, fmt.Errorf("validate: parse key: %w", err)
 	}
-
+	fmt.Println("hereI")
 	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected method: %s", t.Header["alg"])
 		}
 		return key, nil
 	})
-
+	fmt.Println("hereI")
 	if err != nil {
 		return nil, fmt.Errorf("validate: %w", err)
 	}
-
+	fmt.Println("hereI")
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok || !parsedToken.Valid {
 		return nil, fmt.Errorf("validate: invalid token")
 	}
-
+	fmt.Println("hereI")
 	return &TokenDetails{
 		TokenUuid: fmt.Sprint(claims["token_uuid"]),
 		UserID:    fmt.Sprint(claims["sub"]),
