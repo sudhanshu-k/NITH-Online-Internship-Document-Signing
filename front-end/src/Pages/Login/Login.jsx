@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, CardContent } from "@mui/material";
+import { useContext, useState } from "react";
+import { AppContext } from "../../App";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -8,6 +9,9 @@ import { StylesProvider } from "@mui/styles";
 import axios from "axios";
 
 function Login() {
+	const { userState, setUserState } = useContext(AppContext);
+	const [newState, setNewState] = useState({});
+
 	let schema = yup.object().shape({
 		email: yup.string().email().required(),
 		password: yup.string().min(8).required(),
