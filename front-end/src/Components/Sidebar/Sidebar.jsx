@@ -1,8 +1,7 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Drawer, List, ListItem, Divider, ListItemButton, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Drawer, List, ListItem, Divider, ListItemButton, Box, Badge } from "@mui/material";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import { Mail as MailIcon } from "@mui/icons-material";
-import "./Sidebar.css";
 
 function Sidebar() {
 	return (
@@ -16,13 +15,15 @@ function Sidebar() {
 					[`& .MuiDrawer-paper`]: { width: 260, boxSizing: "border-box" },
 				}}
 			>
-				<Toolbar disableGutters="true"/>
+				<Toolbar disableGutters={true} />
 				<Box sx={{ overflow: "auto" }}>
 					<List>
 						<ListItem disablePadding>
 							<ListItemButton>
 								<ListItemIcon>
-									<MailIcon />
+									<Badge color="primary" variant="dot">
+										<MailIcon />
+									</Badge>
 								</ListItemIcon>
 								<ListItemText>List Item 1</ListItemText>
 							</ListItemButton>
