@@ -1,25 +1,39 @@
 package main
 
 import (
-	// errors "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
+	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/initializers"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/router"
 
-	"os"
-
 	"github.com/gofiber/fiber/v2"
-	_ "github.com/joho/godotenv/autoload"
+	// "github.com/gofiber/fiber/v2/middleware/cors"
 )
+
+func init() {
+	config, err := initializers.LoadConfig(".")
+	utils.LogIfError(err, "Failed to load environment variables! \n")
+
+	initializers.ConnectDB(&config)
+	initializers.ConnectRedis(&config)
+}
 
 func main() {
 	//new fiber instance
 	app := fiber.New()
-
-	//connect to db
-	database.ConnectDB()
+	// app.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     "*",
+	// 	AllowHeaders:     "Origin, Content-Type, Accept",
+	// 	// AllowCredentials: true,
+	// }))
+	// app.Use(middleware.Security)
 
 	// Setup the router
 	router.SetupRoutes(app)
 
-	app.Listen(":" + os.Getenv("PORT"))
+	config, err := initializers.LoadConfig(".")
+	utils.LogIfError(err, "Failed to load environment variables! \n")
+
+	app.Listen(config.PORT)
 }

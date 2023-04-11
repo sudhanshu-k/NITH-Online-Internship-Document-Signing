@@ -1,6 +1,6 @@
 package database
 
-import "gorm.io/gorm"
+import "github.com/jackc/pgx/v5/pgxpool"
 
 // DB gorm connector
-var DB *gorm.DB
+var DB *pgxpool.Pool
