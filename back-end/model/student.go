@@ -12,8 +12,6 @@ type Student struct {
 	LastName  string     `json:"lastname,omitempty"`
 	Email     string     `gorm:"unique" json:"email"`
 	Password  string     `json:"password"`
-	Sessions  []Session  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
-	// Products  []Product  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"-" `
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"-"`
 }
