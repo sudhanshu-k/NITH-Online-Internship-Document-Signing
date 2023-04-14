@@ -1,7 +1,12 @@
 # dotenv environment variables file
 app.env
-.env.test
 
 #test
 server
 tmp
+
+#schema
+create_db_schema.sql
+
+vendor/
+docs/

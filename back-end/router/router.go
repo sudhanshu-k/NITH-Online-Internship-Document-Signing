@@ -3,30 +3,53 @@ package router
 import (
 	// swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/auth"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/form"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/home"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/profile"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
+	_ "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/docs"
 )
 
+// @title Fiber Example API
+// @version 1.0
+// @description This is a sample swagger for Fiber
+// @contact.name API Support
+// @contact.email youremail@provider.com
+// @host localhost:3000
+// @BasePath /
 func SetupRoutes(app *fiber.App) {
-	// app.Get("/swagger/*", swagger.Handler)
+	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
+		URL:         "/swagger/doc.json",
+		DeepLinking: false,
+	}))
 
-	// Setup test routes, can use same syntax to add routes for more models
-	// for testing app
 	test := app.Group("/", logger.New())
-	test.Get("", middleware.AuthenticateUser ,home.Test)
 
-	// Group api calls with param '/api'
+	// testing route or health check route
+	test.Get("", middleware.AuthenticateUser, home.Test)
+
+	// Group api calls with param '/api' : all api routes
 	api := app.Group("/api")
 
+	// Group api calls with param '/auth' :autorization routes
 	authRoutes := api.Group("/auth")
 	authRoutes.Post("/register", auth.Register)
 	authRoutes.Post("/signin", auth.SignInUser)
 	authRoutes.Post("/refresh", middleware.AuthenticateUser, auth.RefreshAccessToken)
 	authRoutes.Post("/signout", middleware.AuthenticateUser, auth.LogoutUser)
 
-	authRoutes.Get("/users/me", middleware.AuthenticateUser, auth.GetMe)
+	// Group api calls with param '/profile' :user details routes
+	profileRoute:=api.Group("/profile", middleware.AuthenticateUser)
+	profileRoute.Get("/me", profile.GetMe)
+	profileRoute.Get("/dashboard", profile.Dashboard)
+
+	// Group api calls with param /form$ :form routes
+	formRoute:=api.Group("/form", middleware.AuthenticateUser)
+	formRoute.Post("/ugintern", form.FillUgIntern)
+	formRoute.Get("/ugintern", form.GetUgIntern)
 }

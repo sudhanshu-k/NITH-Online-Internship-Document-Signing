@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +18,7 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	authorization := c.Get("Authorization")
 
 	if strings.HasPrefix(authorization, "Bearer ") {
-		fmt.Print(access_token + "sdf")
+		// fmt.Print(access_token + "sdf")
 		access_token = strings.TrimPrefix(authorization, "Bearer ")
 	} else if c.Cookies("access_token") != "" {
 		access_token = c.Cookies("access_token")
@@ -40,22 +40,22 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	if err == redis.Nil {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "Token is invalid or session has expired"})
 	}
-	fmt.Print(ID)
+	// fmt.Print(ID)
 
-	var user model.Student
-	fetchUserQuery := `select id, first_name, last_name, email, created_at, updated_at from users where id=$1`
+	var user model.User
+	fetchUserQuery := `select id, first_name, last_name, email from users where id=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, ID)
 	utils.FatalError(rows.Err())
-	fmt.Println("here")
+	// fmt.Println("here")
 
 	if !rows.Next() {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "the user belonging to this token no logger exists"})
 	}
-	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email)
 
 	c.Locals("user", model.FilterUserRecord(&user))
 	c.Locals("access_token_uuid", tokenClaims.TokenUuid)
 
-	fmt.Printf("here")
+	// fmt.Printf("here")
 	return c.Next()
 }
