@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"time"
 
+	// "github.com/gofiber/redirect/v2"
 	"github.com/badoux/checkmail"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/initializers"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -45,9 +47,10 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	insertQuery := `insert into students values($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
+	insertQuery := `insert into users values($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`
 
 	res, err := db.Exec(context.Background(), insertQuery, uuid.New(), json.FirstName, json.LastName, json.Email, json.Password)
+	fmt.Printf("res: %v\n", res)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -72,7 +75,7 @@ func SignInUser(c *fiber.Ctx) error {
 		})
 	}
 	
-	fetchUserQuery := `select id, email, password from students where email=$1`
+	fetchUserQuery := `select id, first_name, last_name, email, password from users where email=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, payload.Email)
 	utils.FatalError(rows.Err())
 	
@@ -80,7 +83,7 @@ func SignInUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "User doesnot exist."})
 	}
 	var user model.Student
-	rows.Scan(&user.ID, &user.Email, &user.Password)
+	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password)
 	
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password))
 	if err != nil {
@@ -111,8 +114,8 @@ func SignInUser(c *fiber.Ctx) error {
 	if errAccess != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": errRefresh.Error()})
 	}
-	fmt.Println(time.Now())
-	fmt.Println(time.Now().Add(time.Duration(config.AccessTokenMaxAge)))
+	// fmt.Println(time.Now())
+	// fmt.Println(time.Now().Add(time.Duration(config.AccessTokenMaxAge)))
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    *accessTokenDetails.Token,
@@ -142,8 +145,11 @@ func SignInUser(c *fiber.Ctx) error {
 		HTTPOnly: false,
 		// Domain:   "localhost",
 	})
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token})
+	var userData model.UserResponse
+	userData.Email=user.Email
+	userData.FirstName=user.FirstName
+	userData.LastName=user.LastName
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token, "user": userData})
 }
 
 func RefreshAccessToken(c *fiber.Ctx) error {
@@ -170,7 +176,7 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 
 	var user model.Student
 
-	fetchUserQuery := `select id from students where id=$1`
+	fetchUserQuery := `select id from users where id=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, userid)
 	utils.FatalError(rows.Err())
 	
@@ -225,20 +231,20 @@ func LogoutUser(c *fiber.Ctx) error {
 
 	config, _ := initializers.LoadConfig(".")
 	ctx := context.TODO()
-	fmt.Println("here")
+	// fmt.Println("here")
 	// fmt.Println(refresh_token)
 	tokenClaims, err := utils.ValidateToken(refresh_token, config.RefreshTokenPublicKey)
 	if err != nil {
-		fmt.Print("here")
+		// fmt.Print("here")
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
-	fmt.Println("here")
+	// fmt.Println("here")
 	access_token_uuid := c.Locals("access_token_uuid").(string)
 	_, err = initializers.RedisClient.Del(ctx, tokenClaims.TokenUuid, access_token_uuid).Result()
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
-	fmt.Println("here")
+	// fmt.Println("here")
 	expired := time.Now().Add(-time.Hour * 24)
 	c.Cookie(&fiber.Cookie{
 		Name:    "access_token",
@@ -256,4 +262,10 @@ func LogoutUser(c *fiber.Ctx) error {
 		Expires: expired,
 	})
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
+}
+
+func GetMe(c *fiber.Ctx) error {
+	user := c.Locals("user").(model.UserResponse)
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "data": fiber.Map{"user": user}})
 }

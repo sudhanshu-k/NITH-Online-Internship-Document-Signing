@@ -27,4 +27,6 @@ func SetupRoutes(app *fiber.App) {
 	authRoutes.Post("/signin", auth.SignInUser)
 	authRoutes.Post("/refresh", middleware.AuthenticateUser, auth.RefreshAccessToken)
 	authRoutes.Post("/signout", middleware.AuthenticateUser, auth.LogoutUser)
+
+	authRoutes.Get("/users/me", middleware.AuthenticateUser, auth.GetMe)
 }

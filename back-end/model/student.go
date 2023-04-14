@@ -26,3 +26,9 @@ func FilterUserRecord(user *Student) Student {
 		UpdatedAt: user.UpdatedAt,
 	}
 }
+
+type UserResponse struct {
+	FirstName string     `json:"firstname"`
+	LastName  string     `json:"lastname,omitempty"`
+	Email     string     `gorm:"unique" json:"email"`
+}
