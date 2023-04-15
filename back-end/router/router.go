@@ -3,7 +3,6 @@ package router
 import (
 	// swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
-	swagger "github.com/arsmn/fiber-swagger/v2"
 
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
@@ -12,22 +11,9 @@ import (
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/home"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/handlers/profile"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
-	_ "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/docs"
 )
 
-// @title Fiber Example API
-// @version 1.0
-// @description This is a sample swagger for Fiber
-// @contact.name API Support
-// @contact.email youremail@provider.com
-// @host localhost:3000
-// @BasePath /
 func SetupRoutes(app *fiber.App) {
-	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
-		URL:         "/swagger/doc.json",
-		DeepLinking: false,
-	}))
-
 	test := app.Group("/", logger.New())
 
 	// testing route or health check route

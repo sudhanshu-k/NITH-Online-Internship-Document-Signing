@@ -1,12 +1,7 @@
 # dotenv environment variables file
 app.env
 
-#test
-server
-tmp
-
 #schema
 create_db_schema.sql
 
-vendor/
-docs/
+go.mod
