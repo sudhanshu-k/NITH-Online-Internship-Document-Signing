@@ -3,5 +3,3 @@ app.env
 
 #schema
 create_db_schema.sql
-
-go.mod
