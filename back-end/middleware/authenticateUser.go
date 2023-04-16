@@ -54,6 +54,7 @@ func AuthenticateUser(c *fiber.Ctx) error {
 
 	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.IsFaculty)
 	userDetails := model.FilterUserRecord(&user)
+	userDetails.IsLog=true
 
 	if user.IsFaculty {
 		fetchTeacherQuery := `select level from faculty where iduser=$1`
