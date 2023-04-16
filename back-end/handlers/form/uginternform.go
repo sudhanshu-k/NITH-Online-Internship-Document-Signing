@@ -55,6 +55,8 @@ func FillUgIntern(c *fiber.Ctx) error {
 	insertQuery = "insert into user_to_form values($1, $2)"
 	res, err = database.DB.Exec(context.TODO(), insertQuery, user.ID.String(), uuidForm.String())
 
+	
+
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":    404,

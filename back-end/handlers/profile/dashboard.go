@@ -15,18 +15,27 @@ import (
 func Dashboard(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.UserResponse)
 
-	getAllForms:="select idform1 from user_to_form where iduser=$1"
+	if !user.IsFaculty {
+		getAllForms := "select idform1 from user_to_form where iduser=$1"
 
-	rows, _:=database.DB.Query(context.Background(), getAllForms, user.ID.String())
-	// utils.FatalError(rows.Err())
+		rows, err := database.DB.Query(context.Background(), getAllForms, user.ID.String())
+		// utils.FatalError(rows.Err())
 
-	if !rows.Next() {
-		return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{"status": "success", "message": "No forms filled.", "rows":rows})
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "failed", "message": "DB Error."})
+		}
+
+		if !rows.Next() {
+			return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{"status": "success", "message": "No forms filled.", "rows": ""})
+		}
+
+		var data uuid.UUID
+		rows.Scan(&data)
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Filled Form", "rows": rows})
 	}
 
-	var data uuid.UUID
-	rows.Scan(&data)
+	
 
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "rows": data, "filled": 1})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "rows": "jh", "filled": 1})
 }

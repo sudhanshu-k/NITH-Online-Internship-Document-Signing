@@ -12,6 +12,7 @@ type User struct {
 	FirstName string     `json:"firstname"`
 	LastName  string     `json:"lastname,omitempty"`
 	Email     string     `json:"email"`
+	IsFaculty bool       `json:"isfaculty"`
 	Password  string     `json:"password"`
 	CreatedAt time.Time  `json:"-" `
 	UpdatedAt time.Time  `json:"-"`
@@ -23,6 +24,8 @@ type UserResponse struct {
 	FirstName string     `json:"firstname"`
 	LastName  string     `json:"lastname,omitempty"`
 	Email     string     `json:"email"`
+	IsFaculty bool       `json:"isfaculty"`
+	Level     string     `json:"level"`
 }
 
 // convert user->userResponse
@@ -32,5 +35,6 @@ func FilterUserRecord(user *User) UserResponse {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 		Email:     user.Email,
+		IsFaculty: user.IsFaculty,
 	}
 }
