@@ -26,6 +26,7 @@ type UserResponse struct {
 	Email     string     `json:"email"`
 	IsFaculty bool       `json:"isfaculty"`
 	Level     string     `json:"level"`
+	IsLog     bool       `json:"isloggedin"`
 }
 
 // convert user->userResponse

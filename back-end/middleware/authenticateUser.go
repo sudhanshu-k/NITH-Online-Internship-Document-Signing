@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 	// "fmt"
-	// "strings"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"
@@ -15,13 +15,12 @@ import (
 
 func AuthenticateUser(c *fiber.Ctx) error {
 	var access_token string
-	// authorization := c.Get("Authorization")
+	authorization := c.Get("Authorization")
 
-	// if strings.HasPrefix(authorization, "Bearer ") {
-	// 	// fmt.Print(access_token + "sdf")
-	// 	access_token = strings.TrimPrefix(authorization, "Bearer ")
-	// } else 
-	if c.Cookies("access_token") != "" {
+	if strings.HasPrefix(authorization, "Bearer ") {
+		// fmt.Print(access_token + "sdf")
+		access_token = strings.TrimPrefix(authorization, "Bearer ")
+	} else if c.Cookies("access_token") != "" {
 		access_token = c.Cookies("access_token")
 	}
 

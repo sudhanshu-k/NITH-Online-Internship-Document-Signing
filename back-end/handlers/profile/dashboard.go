@@ -35,7 +35,5 @@ func Dashboard(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Filled Form", "rows": rows})
 	}
 
-	
-
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "rows": "jh", "filled": 1})
 }
