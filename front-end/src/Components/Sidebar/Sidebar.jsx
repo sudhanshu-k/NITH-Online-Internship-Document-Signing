@@ -25,7 +25,7 @@ function Sidebar() {
 										<MailIcon />
 									</Badge>
 								</ListItemIcon>
-								<ListItemText>List Item 1</ListItemText>
+								<ListItemText>Document 1</ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</List>
@@ -36,7 +36,7 @@ function Sidebar() {
 								<ListItemIcon>
 									<MailIcon />
 								</ListItemIcon>
-								<ListItemText>List Item 2</ListItemText>
+								<ListItemText>Document 2 </ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</List>
