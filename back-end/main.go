@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "time"
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 
@@ -9,6 +10,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
+	// "github.com/gofiber/fiber/v2/middleware/csrf"
+	// "github.com/google/uuid"
 )
 
 func init() {
@@ -22,11 +26,18 @@ func init() {
 func main() {
 	//new fiber instance
 	app := fiber.New()
+  
+	// app.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     "*",
+	// 	AllowHeaders:     "Origin, Content-Type, Accept",
+	// 	// AllowCredentials: true,
+	// }))
+
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
-		AllowHeaders:     "Origin, Content-Type, Accept",
-		// AllowCredentials: true,
+		AllowOrigins:     "http://localhost:5173",
+		AllowCredentials: true,
 	}))
+
 	// app.Use(middleware.Security)
 
 	// Setup the router

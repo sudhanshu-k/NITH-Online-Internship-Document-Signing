@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +18,9 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	authorization := c.Get("Authorization")
 
 	if strings.HasPrefix(authorization, "Bearer ") {
-		fmt.Print(access_token + "sdf")
+
+	// fmt.Print(access_token + "sdf")
+
 		access_token = strings.TrimPrefix(authorization, "Bearer ")
 	} else if c.Cookies("access_token") != "" {
 		access_token = c.Cookies("access_token")
@@ -54,6 +56,7 @@ func AuthenticateUser(c *fiber.Ctx) error {
 
 	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.IsFaculty)
 	userDetails := model.FilterUserRecord(&user)
+	userDetails.IsLog=true
 
 	if user.IsFaculty {
 		fetchTeacherQuery := `select level from faculty where iduser=$1`
