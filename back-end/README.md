@@ -19,7 +19,7 @@ e
         cd back-end
 
 3. Install the dependencies:
-
+        go get .
         go mod tidy
         
 5. Setup .env file:
