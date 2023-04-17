@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useContext } from "react";
 import { AppContext } from "../../App";
 
 const Navbar = () => {
 	const { userState } = useContext(AppContext);
-	// console.log(userState);
 	return (
 		<nav className="navbar">
 			<div className="navbar-container">
@@ -17,10 +15,18 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="navbar-profile">
-					<Link className="profile-container" to={"/profile-st"}>
-						<AccountCircleIcon className="account-icon" fontSize="large" />
+					{userState.firstname != "" ? (
+						<Link className="profile-container" to={"/profile-st"}>
+							<p className="account-name">{userState.firstname}</p>
+						</Link>
+					) : (
+						<Link className="profile-container" to={"/"}>
+							<p className="account-name">Login</p>
+						</Link>
+					)}
+					{/* <Link className="profile-container" to={"/profile-st"}>
 						<p className="account-name">{userState.firstname}</p>
-					</Link>
+					</Link> */}
 				</div>
 			</div>
 		</nav>

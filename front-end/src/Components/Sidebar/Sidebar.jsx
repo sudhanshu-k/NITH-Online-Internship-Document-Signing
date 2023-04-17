@@ -20,29 +20,36 @@ function Sidebar() {
 				<Toolbar disableGutters={true} />
 				<Box sx={{ overflow: "auto" }}>
 					<List>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									navigate("/dashboard-st");
-								}}
-							>
+						<ListItem>
+							<ListItemButton>
 								<ListItemIcon>
-									<Badge color="primary" variant="dot">
+									<Badge color="warning" variant="dot">
 										<MailIcon />
 									</Badge>
 								</ListItemIcon>
-								<ListItemText>Document 1</ListItemText>
+								<ListItemText>Pending</ListItemText>
 							</ListItemButton>
 						</ListItem>
-					</List>
-					<Divider />
-					<List>
-						<ListItem disablePadding>
+						<Divider />
+						<ListItem>
 							<ListItemButton>
 								<ListItemIcon>
-									<MailIcon />
+									<Badge color="success" variant="dot">
+										<MailIcon />
+									</Badge>
 								</ListItemIcon>
-								<ListItemText>Document 2</ListItemText>
+								<ListItemText>Approved</ListItemText>
+							</ListItemButton>
+						</ListItem>
+						<Divider />
+						<ListItem>
+							<ListItemButton>
+								<ListItemIcon>
+									<Badge color="error" variant="dot">
+										<MailIcon />
+									</Badge>
+								</ListItemIcon>
+								<ListItemText>Rejected</ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</List>
