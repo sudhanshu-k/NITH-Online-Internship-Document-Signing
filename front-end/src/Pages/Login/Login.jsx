@@ -8,6 +8,8 @@ import "./Login.css";
 import { StylesProvider } from "@mui/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToggleButton } from "@mui/material";
+import { Check } from "@mui/icons-material";
 
 function Login() {
 	const { userState, setUserState, setAccesstoken } = useContext(AppContext);
@@ -24,8 +26,10 @@ function Login() {
 	} = useForm({ resolver: yupResolver(schema) });
 
 	const navigate = useNavigate();
+	const [selected, setSelected] = React.useState(false);
 
 	const onSubmit = (data) => {
+		console.log("Submitted");
 		axios
 			.post("http://127.0.0.1:3000/api/auth/signin", data, {
 				withCredentials: true,
@@ -36,7 +40,11 @@ function Login() {
 					console.log(response.data.user);
 					// setAccesstoken(response.data.data.access_token);
 					setUserState(response.data.user);
-					navigate("/dashboard-st");
+					if (selected) {
+						navigate("/dashboard-ty");
+					} else {
+						navigate("/dashboard-st");
+					}
 					// console.log(userState);
 				} else {
 					alert("Something Went Wrong");
@@ -50,7 +58,6 @@ function Login() {
 	return (
 		<StylesProvider>
 			<div className="login-card">
-				<div className="login-header"></div>
 				<div className="login-form">
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<input type="text" className="login-input" placeholder="Email..." {...register("email")} />
@@ -60,6 +67,18 @@ function Login() {
 						<input type="submit" className="login-submit" />
 					</form>
 				</div>
+				<div className="login-teach">Are you a faculty member ?</div>
+				<ToggleButton
+					value="check"
+					selected={selected}
+					color="success"
+					size="small"
+					onChange={() => {
+						setSelected(!selected);
+					}}
+				>
+					<Check />
+				</ToggleButton>
 			</div>
 		</StylesProvider>
 	);

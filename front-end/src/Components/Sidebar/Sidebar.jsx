@@ -2,8 +2,10 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Drawer, List, ListItem, Divider, ListItemButton, Box, Badge } from "@mui/material";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import { Mail as MailIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+	const navigate = useNavigate();
 	return (
 		<div>
 			<Drawer
@@ -18,25 +20,36 @@ function Sidebar() {
 				<Toolbar disableGutters={true} />
 				<Box sx={{ overflow: "auto" }}>
 					<List>
-						<ListItem disablePadding>
+						<ListItem>
 							<ListItemButton>
 								<ListItemIcon>
-									<Badge color="primary" variant="dot">
+									<Badge color="warning" variant="dot">
 										<MailIcon />
 									</Badge>
 								</ListItemIcon>
-								<ListItemText>Document 1</ListItemText>
+								<ListItemText>Pending</ListItemText>
 							</ListItemButton>
 						</ListItem>
-					</List>
-					<Divider />
-					<List>
-						<ListItem disablePadding>
+						<Divider />
+						<ListItem>
 							<ListItemButton>
 								<ListItemIcon>
-									<MailIcon />
+									<Badge color="success" variant="dot">
+										<MailIcon />
+									</Badge>
 								</ListItemIcon>
-								<ListItemText>Document 2 </ListItemText>
+								<ListItemText>Approved</ListItemText>
+							</ListItemButton>
+						</ListItem>
+						<Divider />
+						<ListItem>
+							<ListItemButton>
+								<ListItemIcon>
+									<Badge color="error" variant="dot">
+										<MailIcon />
+									</Badge>
+								</ListItemIcon>
+								<ListItemText>Rejected</ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</List>
