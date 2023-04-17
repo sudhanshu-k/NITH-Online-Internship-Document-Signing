@@ -18,7 +18,9 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	authorization := c.Get("Authorization")
 
 	if strings.HasPrefix(authorization, "Bearer ") {
-		// fmt.Print(access_token + "sdf")
+
+	// fmt.Print(access_token + "sdf")
+
 		access_token = strings.TrimPrefix(authorization, "Bearer ")
 	} else if c.Cookies("access_token") != "" {
 		access_token = c.Cookies("access_token")

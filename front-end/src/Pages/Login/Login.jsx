@@ -7,10 +7,10 @@ import * as yup from "yup";
 import "./Login.css";
 import { StylesProvider } from "@mui/styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-	const { userState, setUserState } = useContext(AppContext);
-	const [newState, setNewState] = useState({});
+	const { userState, setUserState, setAccesstoken } = useContext(AppContext);
 
 	let schema = yup.object().shape({
 		email: yup.string().email().required(),
@@ -23,11 +23,21 @@ function Login() {
 		formState: { errors },
 	} = useForm({ resolver: yupResolver(schema) });
 
+	const navigate = useNavigate();
+
 	const onSubmit = (data) => {
 		axios
-			.post("/api/auth/signin", data)
+			.post("http://127.0.0.1:3000/api/auth/signin", data)
 			.then(function (response) {
-				console.log(response);
+				if (response.status == 200) {
+					// console.log(response.data.access_token);
+					setAccesstoken(response.data.access_token);
+					setUserState(response.data.user);
+					// console.log(userState);
+					navigate("/dashboard-st");
+				} else {
+					alert("Something Went Wrong");
+				}
 			})
 			.catch(function (error) {
 				console.log(error);
@@ -36,18 +46,16 @@ function Login() {
 
 	return (
 		<StylesProvider>
-			<div className="login-body">
-				<div className="login-card">
-					<div className="login-header"></div>
-					<div className="login-form">
-						<form onSubmit={handleSubmit(onSubmit)}>
-							<input type="text" className="login-input" placeholder="Email..." {...register("email")} />
-							<p className="login-error">{errors.email?.message}</p>
-							<input type="password" className="login-input" placeholder="Password..." {...register("password")} />
-							<p className="login-error">{errors.password?.message}</p>
-							<input type="submit" className="login-submit" />
-						</form>
-					</div>
+			<div className="login-card">
+				<div className="login-header"></div>
+				<div className="login-form">
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<input type="text" className="login-input" placeholder="Email..." {...register("email")} />
+						<p className="login-error">{errors.email?.message}</p>
+						<input type="password" className="login-input" placeholder="Password..." {...register("password")} />
+						<p className="login-error">{errors.password?.message}</p>
+						<input type="submit" className="login-submit" />
+					</form>
 				</div>
 			</div>
 		</StylesProvider>

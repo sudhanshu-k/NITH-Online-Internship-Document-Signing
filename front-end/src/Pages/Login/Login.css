@@ -1,5 +1,5 @@
 .login-body {
-	margin-top: 30vh;
+	margin-top: 20vh;
 	margin-left: 10vw;
 	display: flex;
 	align-items: center;
@@ -43,4 +43,13 @@
 	color: #000000;
 	border-style: solid;
 	border-radius: 10px;
+}
+
+.setup-body {
+	display: flex;
+	flex-direction: column;
+}
+
+.setup-child {
+	margin: 1em;
 }

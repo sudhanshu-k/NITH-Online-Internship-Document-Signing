@@ -108,6 +108,7 @@ func SignInUser(c *fiber.Ctx) error {
 		SameSite: "None",
 	})
 
+
 	return c.Redirect(c.BaseURL() + "/api/profile/me")
 	// return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
 

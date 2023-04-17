@@ -10,6 +10,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
 	// "github.com/gofiber/fiber/v2/middleware/csrf"
 	// "github.com/google/uuid"
 )
@@ -25,6 +26,7 @@ func init() {
 func main() {
 	//new fiber instance
 	app := fiber.New()
+  
 	// app.Use(cors.New(cors.Config{
 	// 	AllowOrigins:     "*",
 	// 	AllowHeaders:     "Origin, Content-Type, Accept",
