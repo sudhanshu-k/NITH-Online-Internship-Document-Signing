@@ -71,6 +71,7 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 		MaxAge:   config.AccessTokenMaxAge * 60,
 		HTTPOnly: true,
 		// Domain:   "localhost",
+		// SameSite: "None",
 	})
 
 	c.Cookie(&fiber.Cookie{
@@ -81,6 +82,7 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 		Secure:   false,
 		HTTPOnly: false,
 		// Domain:   "localhost",
+		// SameSite: "None",
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token})
