@@ -27,7 +27,7 @@ func SignInUser(c *fiber.Ctx) error {
 		})
 	}
 
-	fetchUserQuery := `select id, first_name, last_name, email, password from users where email=$1`
+	fetchUserQuery := `select id, first_name, last_name, email, password, "isFaculty" from users where email=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, payload.Email)
 	utils.FatalError(rows.Err())
 
@@ -35,7 +35,7 @@ func SignInUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "User doesnot exist."})
 	}
 	var user model.User
-	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password)
+	rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.IsFaculty)
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password))
 	if err != nil {
@@ -74,6 +74,7 @@ func SignInUser(c *fiber.Ctx) error {
 	userData.FirstName = user.FirstName
 	userData.LastName = user.LastName
 	userData.IsLog = true
+	userData.IsFaculty=user.IsFaculty
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
