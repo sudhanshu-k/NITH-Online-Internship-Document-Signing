@@ -98,5 +98,12 @@ func SignInUser(c *fiber.Ctx) error {
 		// Domain:   "localhost",
 	})
 
-	return c.Redirect(c.BaseURL() + "/api/profile/me")
+	// return c.Redirect(c.BaseURL() + "/api/profile/me")
+	// return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"}) 
+	var userData model.UserResponse
+	userData.Email = user.Email
+	userData.FirstName = user.FirstName
+	userData.LastName = user.LastName
+	userData.IsLog = true
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token, "user": userData})
 }

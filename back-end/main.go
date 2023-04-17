@@ -8,7 +8,7 @@ import (
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/router"
 
 	"github.com/gofiber/fiber/v2"
-	// "github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func init() {
@@ -22,11 +22,11 @@ func init() {
 func main() {
 	//new fiber instance
 	app := fiber.New()
-	// app.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     "*",
-	// 	AllowHeaders:     "Origin, Content-Type, Accept",
-	// 	// AllowCredentials: true,
-	// }))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		// AllowCredentials: true,
+	}))
 	// app.Use(middleware.Security)
 
 	// Setup the router
