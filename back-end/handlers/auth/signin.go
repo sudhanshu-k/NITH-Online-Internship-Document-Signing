@@ -69,15 +69,15 @@ func SignInUser(c *fiber.Ctx) error {
 	// fmt.Println(time.Now())
 	// fmt.Println(time.Now().Add(time.Duration(config.AccessTokenMaxAge)))
 
-	// var userData model.UserResponse
-	// userData.Email = user.Email
-	// userData.FirstName = user.FirstName
-	// userData.LastName = user.LastName
-	// userData.IsLog = true
+	var userData model.UserResponse
+	userData.Email = user.Email
+	userData.FirstName = user.FirstName
+	userData.LastName = user.LastName
+	userData.IsLog = true
 
 	c.Cookie(&fiber.Cookie{
-		Name:  "access_token",
-		Value: *accessTokenDetails.Token,
+		Name:     "access_token",
+		Value:    *accessTokenDetails.Token,
 		Path:     "/",
 		Secure:   false,
 		MaxAge:   config.AccessTokenMaxAge * 60,
@@ -108,9 +108,8 @@ func SignInUser(c *fiber.Ctx) error {
 		SameSite: "None",
 	})
 
-
-	return c.Redirect(c.BaseURL() + "/api/profile/me")
+	// return c.Redirect(c.BaseURL() + "/api/profile/me")
 	// return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
 
-	// return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token, "user": userData})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "access_token": accessTokenDetails.Token, "user": userData})
 }

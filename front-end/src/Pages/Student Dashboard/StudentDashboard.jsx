@@ -23,14 +23,15 @@ import axios from "axios";
 
 function StudentDashboard() {
 	const { accesstoken } = useContext(AppContext);
-	let header = {
-		Authorization: `Bearer ${accesstoken}`,
-	};
-
 	useEffect(() => {
-		axios.get("http://127.0.0.1:3000/api/profile/dashboard", { headers: header }).then((response) => {
-			console.log(response);
-		});
+		axios
+			.get("http://127.0.0.1:3000/api/profile/dashboard", {
+				withCredentials: true,
+				credentials: "included",
+			})
+			.then((response) => {
+				console.log(response);
+			});
 	}, []);
 
 	return (<>
