@@ -27,6 +27,22 @@ e
         path: ./back-end
         
         Format:
+        ```.env
+        PORT=:x
+
+        DATABASE_URL=[postgress]
+
+        REDIS_URL=
+
+        ACCESS_TOKEN_PRIVATE_KEY=
+        ACCESS_TOKEN_PUBLIC_KEY=
+        ACCESS_TOKEN_EXPIRED_IN=15m
+        ACCESS_TOKEN_MAXAGE=15
+
+        REFRESH_TOKEN_PRIVATE_KEY=
+        REFRESH_TOKEN_PUBLIC_KEY=
+        REFRESH_TOKEN_EXPIRED_IN=60m
+        REFRESH_TOKEN_MAXAGE=60
         
 
 4. Start the development server:
