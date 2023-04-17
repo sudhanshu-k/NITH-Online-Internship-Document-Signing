@@ -41,21 +41,27 @@ func RefreshAccessToken(c *fiber.Ctx) error {
 	var user model.User
 
 	fetchUserQuery := `select id from users where id=$1`
-	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, userid)
+	rows, err := database.DB.Query(context.Background(), fetchUserQuery, userid)
 	utils.FatalError(rows.Err())
+
+	if err!=nil{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
+	}
 
 	if !rows.Next() {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "User doesnot exist."})
 	}
 	rows.Scan(&user.ID)
 
-	accessTokenDetails, err := utils.CreateToken(user.ID.String(), time.Duration(config.AccessTokenMaxAge), config.AccessTokenPrivateKey)
+	accessTokenDetails, err := utils.CreateToken(user.ID.String(), config.AccessTokenExpiresIn, config.AccessTokenPrivateKey)
 	if err != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
 	now := time.Now()
-
 
 	errAccess := initializers.RedisClient.Set(ctx, accessTokenDetails.TokenUuid, user.ID.String(), time.Unix(*accessTokenDetails.ExpiresIn, 0).Sub(now)).Err()
 	if errAccess != nil {

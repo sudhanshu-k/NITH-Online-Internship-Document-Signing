@@ -84,7 +84,7 @@ func SignInUser(c *fiber.Ctx) error {
 		MaxAge:   config.AccessTokenMaxAge * 60,
 		HTTPOnly: true,
 		// Domain:   "localhost",
-		SameSite: "None",
+		// SameSite: "None",
 	})
 
 	c.Cookie(&fiber.Cookie{
@@ -95,7 +95,7 @@ func SignInUser(c *fiber.Ctx) error {
 		Secure:   false,
 		HTTPOnly: true,
 		// Domain:   "localhost",
-		SameSite: "None",
+		// SameSite: "None",
 	})
 
 	c.Cookie(&fiber.Cookie{
@@ -106,7 +106,7 @@ func SignInUser(c *fiber.Ctx) error {
 		Secure:   false,
 		HTTPOnly: false,
 		// Domain:   "localhost",
-		SameSite: "None",
+		// SameSite: "None",
 	})
 
 	// return c.Redirect(c.BaseURL() + "/api/profile/me")

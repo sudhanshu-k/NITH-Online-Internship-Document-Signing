@@ -28,3 +28,14 @@ type UGInternForm struct {
 	CreatedAt     time.Time  `json:"-" `
 	UpdatedAt     time.Time  `json:"-"`
 }
+
+type user struct {
+	Name       string `json:"name"`
+	RollNumber string `json:"roll"`
+}
+
+type FormResponse struct {
+	ID       guuid.UUID `json:"UUID"`
+	FormType string     `json:"FormName"`
+	User     user       `json:"user"`
+}

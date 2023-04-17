@@ -33,10 +33,13 @@ func SetupRoutes(app *fiber.App) {
 	profileRoute:=api.Group("/profile", middleware.AuthenticateUser)
 	profileRoute.Get("/me", profile.GetMe)
 	profileRoute.Get("/dashboard", profile.Dashboard)
+	profileRoute.Get("/dashboard/approved", profile.GetApproved)
+	profileRoute.Get("/dashboard/rejected", profile.GetRejected)
+	profileRoute.Get("/dashboard", profile.Dashboard)
 
 	// Group api calls with param /form$ :form routes
 	formRoute:=api.Group("/form", middleware.AuthenticateUser)
-	formRoute.Post("/ugintern", form.FillUgIntern)
+	formRoute.Post("/ugintern", form.PostUgIntern)
 	formRoute.Get("/ugintern", form.GetUgIntern)
 	formRoute.Get("/ugintern/:formID", form.GetForm)
 }

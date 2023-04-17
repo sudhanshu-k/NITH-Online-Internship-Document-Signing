@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
 
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
@@ -13,35 +13,19 @@ import (
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
 
-func Dashboard(c *fiber.Ctx) error {
+func GetRejected(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.UserResponse)
 
 	if !user.IsFaculty {
-		getAllForms := "select idform1 from user_to_form where iduser=$1"
-
-		rows, err := database.DB.Query(context.Background(), getAllForms, user.ID.String())
-		// utils.FatalError(rows.Err())
-
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "failed", "message": "DB Error."})
-		}
-
-		if !rows.Next() {
-			return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "No forms filled.", "rows": ""})
-		}
-
-		var data uuid.UUID
-		rows.Scan(&data)
-
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Filled Form", "rows": data})
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "failed", "message": "Not faculty."})
 	}
 
-	getAllFormsToReview := `select idform1, name, email
+	getAllForms := `select idform1, name, email
 			from uginternform, form_to_faculty
 			where uginternform.id=form_to_faculty.idform1 and
 			form_to_faculty.iduser=$1 and status=$2;`
 
-	rows, err := database.DB.Query(context.Background(), getAllFormsToReview, user.ID.String(), "Pending")
+	rows, err := database.DB.Query(context.Background(), getAllForms, user.ID.String(), "Rejected")
 	// utils.FatalError(rows.Err())
 
 	if err != nil {
@@ -51,7 +35,7 @@ func Dashboard(c *fiber.Ctx) error {
 	var formData []model.FormResponse
 
 	if !rows.Next() {
-		return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{"status": "success", "message": "All forms are reviewed.", "rows": ""})
+		return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{"status": "success", "message": "No rejected forms.", "rows": ""})
 	} else {
 		var form model.FormResponse
 		rows.Scan(&form.ID, &form.User.Name, &form.User.RollNumber)
@@ -67,5 +51,5 @@ func Dashboard(c *fiber.Ctx) error {
 		}
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Forms pending for Review", "rows": formData})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "Approved Forms", "rows": formData})
 }
