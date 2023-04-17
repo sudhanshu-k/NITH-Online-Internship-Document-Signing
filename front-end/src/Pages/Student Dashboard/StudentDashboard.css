@@ -1,3 +1,24 @@
+
+.form{
+    margin-top : 5vh;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+.left {
+    width: 50%;
+    height: 100vh;
+    background-color: green;
+    text-align: right;
+    color: white;
+}
+
+.right {
+    width: 50%;
+    color: green;
+    height: 100vh;
+}
+=======
 .dashboard-body {
 	margin-left: 10vw;
 	margin-top: 10vh;
