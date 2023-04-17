@@ -1,20 +1,4 @@
-
-
-import UgIntern from "../Forms/UG Training Request Form/UgInten";
-
 import Body from "../../Components/Body/Body";
-
-
-
-let formProps = {
-name: "Kshitij Roodkee",
-fname:"Jitender Singh Roodkee"
-
-}
-
-
-
-
 import React, { useEffect } from "react";
 import "./StudentDashboard.css";
 import { useContext } from "react";
@@ -34,11 +18,14 @@ function StudentDashboard() {
 			});
 	}, []);
 
-	return (<>
-  <div className="dashboard-body">StudentDashboard</div>
-  <div className="form"><Body/></div>
-  </>);
-
+	return (
+		<>
+			<div className="dashboard-body">StudentDashboard</div>
+			<div className="form">
+				<Body />
+			</div>
+		</>
+	);
 }
 
 export default StudentDashboard;
