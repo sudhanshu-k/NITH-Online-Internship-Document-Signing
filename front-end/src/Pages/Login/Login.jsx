@@ -27,14 +27,17 @@ function Login() {
 
 	const onSubmit = (data) => {
 		axios
-			.post("http://127.0.0.1:3000/api/auth/signin", data)
+			.post("http://127.0.0.1:3000/api/auth/signin", data, {
+				withCredentials: true,
+				credential: "include",
+			})
 			.then(function (response) {
 				if (response.status == 200) {
-					// console.log(response.data.access_token);
-					setAccesstoken(response.data.access_token);
+					console.log(response.data.user);
+					// setAccesstoken(response.data.data.access_token);
 					setUserState(response.data.user);
-					// console.log(userState);
 					navigate("/dashboard-st");
+					// console.log(userState);
 				} else {
 					alert("Something Went Wrong");
 				}
