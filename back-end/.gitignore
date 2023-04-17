@@ -1,7 +1,5 @@
 # dotenv environment variables file
 .env
-.env.test
 
-#test
-server
-tmp
+#schema
+create_db_schema.sql

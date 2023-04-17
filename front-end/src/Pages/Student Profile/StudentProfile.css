@@ -1,0 +1,80 @@
+.student-profile-container {
+	margin-top: 10vh;
+	margin-left: 10vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1500;
+}
+
+.user-detail {
+	font-size: 1.25em;
+	letter-spacing: 0.02em;
+}
+
+figure {
+	width: 300px;
+	height: 200px;
+	margin: 0;
+	padding: 0;
+	background: #fff;
+	overflow: hidden;
+}
+figure:hover + span {
+	bottom: -36px;
+	opacity: 1;
+}
+
+.user-img {
+	width: 25vh;
+	height: 25vh;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-bottom: 2em;
+	-webkit-transition: 0.3s ease-in-out;
+	transition: 0.3s ease-in-out;
+	-webkit-filter: blur(0);
+	filter: blur(0);
+}
+
+.user-img:hover {
+	-webkit-filter: blur(2px);
+	filter: blur(2px);
+	cursor: pointer;
+}
+
+.user-button {
+	text-decoration: none;
+	background-color: #fff;
+	border: solid 1px dimgray;
+	border-radius: 10px;
+	box-shadow: none;
+	padding: 0.75em;
+	transition: 0.1s ease-in-out;
+}
+
+.user-button:hover {
+	cursor: pointer;
+	box-shadow: 1px 1px 10px dimgray;
+}
+
+.user-field {
+	max-width: 190px;
+	background-color: white;
+	color: #242424;
+	padding: 0.15rem 0.5rem;
+	min-height: 40px;
+	border-radius: 8px 8px 0px 0px;
+	outline: none;
+	border: none;
+	border-bottom: solid 1px dimgray;
+	line-height: 1.15;
+}
+
+.user-field:hover {
+	outline: 1px solid lightgrey;
+}
+
+.user-field:focus {
+	border: solid 1px dimgray;
+}

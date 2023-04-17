@@ -3,7 +3,7 @@
 	top: 0;
 	left: 0;
 	right: 0;
-	z-index: 9999;
+	z-index: 1201;
 	border-bottom: 1px solid dimgrey;
 	background-color: white;
 	height: 60px;
@@ -33,6 +33,12 @@
 	margin: 0.5em;
 }
 
+.profile-container {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+
 .account-icon {
 	color: dimgray;
 }
@@ -40,5 +46,6 @@
 .account-name {
 	color: dimgray;
 	font-weight: 500;
+	margin-left: 1em;
 	letter-spacing: 0.15em;
 }
