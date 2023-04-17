@@ -2,8 +2,10 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Drawer, List, ListItem, Divider, ListItemButton, Box, Badge } from "@mui/material";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import { Mail as MailIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+	const navigate = useNavigate();
 	return (
 		<div>
 			<Drawer
@@ -19,7 +21,11 @@ function Sidebar() {
 				<Box sx={{ overflow: "auto" }}>
 					<List>
 						<ListItem disablePadding>
-							<ListItemButton>
+							<ListItemButton
+								onClick={() => {
+									navigate("/dashboard-st");
+								}}
+							>
 								<ListItemIcon>
 									<Badge color="primary" variant="dot">
 										<MailIcon />
@@ -36,7 +42,7 @@ function Sidebar() {
 								<ListItemIcon>
 									<MailIcon />
 								</ListItemIcon>
-								<ListItemText>Document 2 </ListItemText>
+								<ListItemText>Document 2</ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</List>
