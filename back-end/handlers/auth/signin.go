@@ -69,16 +69,15 @@ func SignInUser(c *fiber.Ctx) error {
 	// fmt.Println(time.Now())
 	// fmt.Println(time.Now().Add(time.Duration(config.AccessTokenMaxAge)))
 
-	var userData model.UserResponse
-	userData.Email = user.Email
-	userData.FirstName = user.FirstName
-	userData.LastName = user.LastName
-	userData.IsLog = true
-	userData.IsFaculty=user.IsFaculty
+	// var userData model.UserResponse
+	// userData.Email = user.Email
+	// userData.FirstName = user.FirstName
+	// userData.LastName = user.LastName
+	// userData.IsLog = true
 
 	c.Cookie(&fiber.Cookie{
-		Name:  "access_token",
-		Value: *accessTokenDetails.Token,
+		Name:     "access_token",
+		Value:    *accessTokenDetails.Token,
 		Path:     "/",
 		Secure:   false,
 		MaxAge:   config.AccessTokenMaxAge * 60,

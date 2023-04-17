@@ -3,10 +3,9 @@ package main
 import (
 	// "time"
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
-
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/initializers"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/router"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -25,6 +24,7 @@ func init() {
 func main() {
 	//new fiber instance
 	app := fiber.New()
+
 	// app.Use(cors.New(cors.Config{
 	// 	AllowOrigins:     "*",
 	// 	AllowHeaders:     "Origin, Content-Type, Accept",
@@ -32,7 +32,7 @@ func main() {
 	// }))
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173",
+		AllowOrigins:     "http://localhost:5174",
 		AllowCredentials: true,
 	}))
 
