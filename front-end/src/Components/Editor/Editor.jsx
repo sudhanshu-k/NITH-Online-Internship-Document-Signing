@@ -26,6 +26,9 @@ function Editor(props) {
     programme: activeInformation?.detail?.programme || "",
     department: activeInformation?.detail?.department || "cse",
     phone: activeInformation?.detail?.phone || "",
+    programme: activeInformation?.detail?.programme || "",
+    rollNo: activeInformation?.detail?.rollNo || "",
+    fName: activeInformation?.detail?.fName || "",
     email: activeInformation?.detail?.email || "",
   });
 
@@ -53,7 +56,7 @@ function Editor(props) {
           value={values.rollNo}
           placeholder="Enter your Roll no eg. 20bcs025"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, title: event.target.value }))
+            setValues((prev) => ({ ...prev, rollNo: event.target.value }))
           }
         />
       </div>
@@ -63,7 +66,7 @@ function Editor(props) {
           value={values.fName}
           placeholder="Enter your Father's Name"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, linkedin: event.target.value }))
+            setValues((prev) => ({ ...prev, fName: event.target.value }))
           }
         />
         <InputControl
@@ -71,18 +74,18 @@ function Editor(props) {
           value={values.programme}
           placeholder="Eg. B.Tech"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, github: event.target.value }))
+            setValues((prev) => ({ ...prev, programme: event.target.value }))
           }
         />
+      </div>
         <InputControl
           label="Department"
           value={values.department}
           placeholder="Eg. CSE"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, github: event.target.value }))
+            setValues((prev) => ({ ...prev, department: event.target.value }))
           }
         />
-      </div>
       <div className={styles.row}>
         <InputControl
           label="Email"
@@ -101,6 +104,7 @@ function Editor(props) {
           }
         />
       </div>
+       
     </div>
   );
 
@@ -132,11 +136,15 @@ function Editor(props) {
       case sections.basicInfo: {
         const tempDetail = {
           name: values.name,
-          title: values.title,
-          linkedin: values.linkedin,
-          github: values.github,
+          rollNo: values.rollNo,
+          programme: values.programme,
+          department: values.department,
           email: values.email,
           phone: values.phone,
+          department: values.department,
+          programme: values.programme,
+          fName: values.fName,
+          rollNo: values.rollNo,
         };
 
         props.setInformation((prev) => ({
@@ -331,6 +339,10 @@ function Editor(props) {
         ? activeInfo.details[0]?.github || ""
         : activeInfo?.detail?.github || "",
       phone: activeInfo?.detail?.phone || "",
+      department: activeInfo?.detail?.department || "cse",
+      programme: activeInfo?.detail?.programme || "",
+      rollNo: activeInfo?.detail?.rollNo || "",
+      fName: activeInfo?.detail?.fName || "",
       email: activeInfo?.detail?.email || "",
       summary: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",
       other: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",
@@ -420,8 +432,13 @@ function Editor(props) {
         </div>
 
         {generateBody()}
-
+        
         <button onClick={handleSubmission}>Save</button>
+      </div>
+      <div>
+
+        <button className={styles.submit} onClick={handleSubmission}>Submit</button>
+      
       </div>
     </div>
   );
