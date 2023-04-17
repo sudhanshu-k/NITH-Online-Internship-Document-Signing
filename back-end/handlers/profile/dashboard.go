@@ -26,7 +26,7 @@ func Dashboard(c *fiber.Ctx) error {
 		}
 
 		if !rows.Next() {
-			return c.Status(fiber.StatusExpectationFailed).JSON(fiber.Map{"status": "success", "message": "No forms filled.", "rows": ""})
+			return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "message": "No forms filled.", "rows": ""})
 		}
 
 		var data uuid.UUID

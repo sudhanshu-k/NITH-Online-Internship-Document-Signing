@@ -1,7 +1,7 @@
 
 .form{
     margin-top : 5vh;
-
+    margin-left: 10vw;
     display: flex;
     flex-wrap: wrap;
 }
