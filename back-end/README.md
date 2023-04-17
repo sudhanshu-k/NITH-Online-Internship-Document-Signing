@@ -47,6 +47,6 @@ e
 
 4. Start the development server:
 
-        go run dev
+        go run dev/go run main.go 
 
 That's it! You can now have the app running locally on your machine.
