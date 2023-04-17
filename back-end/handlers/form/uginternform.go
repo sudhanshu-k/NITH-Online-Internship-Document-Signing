@@ -36,10 +36,10 @@ func FillUgIntern(c *fiber.Ctx) error {
 	}
 	uuidForm := uuid.New()
 	insertQuery := `insert into uginternform values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 
-		$15, $16, $17, $18, $19, $20)`
+		$15, $16, $17, $18, $19)`
 	res, err := database.DB.Exec(context.TODO(), insertQuery, formData.Name, formData.FatherName, formData.Address, formData.Contact,
 		formData.CompanyName, formData.AreaOfIntrest, formData.IsOffline, formData.StartDay, formData.EndDay,
-		formData.Weeks, formData.FromTPO, formData.Stipend, formData.FormDate, formData.RemarksDept, formData.RemarksFI, 0,
+		formData.Weeks, formData.FromTPO, formData.Stipend, formData.FormDate, formData.RemarksDept, formData.RemarksFI,
 		uuidForm, time.Now(), time.Now(), formData.Email)
 
 	if err != nil {
@@ -53,9 +53,22 @@ func FillUgIntern(c *fiber.Ctx) error {
 	fmt.Printf("user.ID: %v\n", user.ID.String())
 	fmt.Printf("user.ID: %v\n", uuidForm.String())
 	insertQuery = "insert into user_to_form values($1, $2)"
-	res, err = database.DB.Exec(context.TODO(), insertQuery, user.ID.String(), uuidForm.String())
+	_, err = database.DB.Exec(context.TODO(), insertQuery, user.ID.String(), uuidForm.String())
 
-	
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
+	}
+
+	rows, _=database.DB.Query(context.TODO(), `select iduser from faculty where level='assistant_professor'`)
+	var facultyID uuid.UUID
+	if rows.Next(){
+		rows.Scan(&facultyID)
+	}
+	insertQuery = "insert into form_to_faculty values($1, $2)"
+	res, err = database.DB.Exec(context.TODO(), insertQuery, facultyID, uuidForm)
 
 	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{

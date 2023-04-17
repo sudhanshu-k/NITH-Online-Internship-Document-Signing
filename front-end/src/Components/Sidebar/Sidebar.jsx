@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
 	const navigate = useNavigate();
-
 	return (
 		<div>
 			<Drawer
