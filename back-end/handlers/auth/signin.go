@@ -74,7 +74,7 @@ func SignInUser(c *fiber.Ctx) error {
 	userData.FirstName = user.FirstName
 	userData.LastName = user.LastName
 	userData.IsLog = true
-	userData.IsFaculty=user.IsFaculty
+	userData.IsFaculty = user.IsFaculty
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
@@ -84,7 +84,7 @@ func SignInUser(c *fiber.Ctx) error {
 		MaxAge:   config.AccessTokenMaxAge * 60,
 		HTTPOnly: true,
 		// Domain:   "localhost",
-		// SameSite: "None",
+		SameSite: "None",
 	})
 
 	c.Cookie(&fiber.Cookie{
@@ -95,7 +95,7 @@ func SignInUser(c *fiber.Ctx) error {
 		Secure:   false,
 		HTTPOnly: true,
 		// Domain:   "localhost",
-		// SameSite: "None",
+		SameSite: "None",
 	})
 
 	c.Cookie(&fiber.Cookie{
@@ -106,7 +106,7 @@ func SignInUser(c *fiber.Ctx) error {
 		Secure:   false,
 		HTTPOnly: false,
 		// Domain:   "localhost",
-		// SameSite: "None",
+		SameSite: "None",
 	})
 
 	// return c.Redirect(c.BaseURL() + "/api/profile/me")

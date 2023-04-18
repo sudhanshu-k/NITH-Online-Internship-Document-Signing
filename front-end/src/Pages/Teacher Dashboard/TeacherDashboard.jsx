@@ -1,24 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UgIntern from "../Forms/UG Training Request Form/UgInten";
 import styles from "./TeacherDashboard.module.css";
 import axios from "axios";
 
 function TeacherDashboard() {
+	const [dataForms, setDataForms] = useState({});
+
 	useEffect(() => {
-		axios({
-			method: "get",
-			url: "http://localhost:3000/api/profile/dashboard",
-			withCredentials: true,
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		async function fetchDashboardData() {
+			try {
+				const response = await axios
+					.get("http://127.0.0.1:3000/api/profile/dashboard", {
+						withCredentials: true,
+						credentials: "include",
+					})
+					.then((response) => {
+						console.log(response.data.rows);
+						setDataForms(response.data.rows);
+					});
+				return response.data.rows; // return the data
+			} catch (error) {
+				console.error(error);
+				throw error; // throw error to be caught by the calling function
+			}
+		}
+
+		async function setData() {
+			const data = await fetchDashboardData();
+			setDataForms(data);
+			console.log("Static Data");
+			console.log(dataForms);
+		}
+		// fetchDashboardData();
+		setData(); // call the async function
 	}, []);
 
 	const data = {
