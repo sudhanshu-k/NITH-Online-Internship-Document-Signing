@@ -43,17 +43,29 @@ func LogoutUser(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
 		Name:    "access_token",
 		Value:   "",
+		Path: "/",
 		Expires: expired,
+		Secure:   false,
+		HTTPOnly: true,
+		SameSite: "None",
 	})
 	c.Cookie(&fiber.Cookie{
 		Name:    "refresh_token",
 		Value:   "",
+		Path: "/",
 		Expires: expired,
+		Secure:   false,
+		HTTPOnly: true,
+		SameSite: "None",
 	})
 	c.Cookie(&fiber.Cookie{
 		Name:    "logged_in",
 		Value:   "",
+		Path: "/",
 		Expires: expired,
+		Secure:   false,
+		HTTPOnly: false,
+		SameSite: "None",
 	})
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
 }

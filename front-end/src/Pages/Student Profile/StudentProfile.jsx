@@ -9,7 +9,7 @@ function StudentProfile() {
 	const { userState, setUserState } = useContext(AppContext);
 	const navigate = useNavigate();
 
-	const handleLogout = () => {
+	const handleLogout = async() => {
 		setUserState({
 			email: "",
 			firstname: "",
@@ -19,10 +19,10 @@ function StudentProfile() {
 			level: "",
 		});
 		localStorage.removeItem("userState");
-		axios.post("http://127.0.0.1:3000/api/auth/signout", {
+		await axios.get("http://127.0.0.1:3000/api/auth/signout", {
 			withCredentials: true,
 			credentials: "include",
-		});
+		})
 		navigate("/");
 	};
 

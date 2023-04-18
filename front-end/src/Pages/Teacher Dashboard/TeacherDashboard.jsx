@@ -16,7 +16,7 @@ function TeacherDashboard() {
 					})
 					.then((response) => {
 						console.log(response.data.rows);
-						setDataForms(response.data.rows);
+						// setDataForms(response.data.rows);
 					});
 				return response.data.rows; // return the data
 			} catch (error) {

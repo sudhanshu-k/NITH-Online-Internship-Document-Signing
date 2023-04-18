@@ -27,7 +27,7 @@ func SetupRoutes(app *fiber.App) {
 	authRoutes.Post("/register", auth.Register)
 	authRoutes.Post("/signin", auth.SignInUser)
 	authRoutes.Get("/refresh", middleware.AuthenticateUser, auth.RefreshAccessToken)
-	authRoutes.Post("/signout", middleware.AuthenticateUser, auth.LogoutUser)
+	authRoutes.Get("/signout", middleware.AuthenticateUser, auth.LogoutUser)
 
 	// Group api calls with param '/profile' :user details routes
 	profileRoute:=api.Group("/profile", middleware.AuthenticateUser)
