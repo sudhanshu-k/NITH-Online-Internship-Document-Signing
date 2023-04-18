@@ -37,7 +37,6 @@ function Login() {
 			})
 			.then(function (response) {
 				if (response.status == 200) {
-					// console.log(response.data.user);
 					// setAccesstoken(response.data.data.access_token);
 					setUserState(response.data.user);
 					localStorage.setItem("userState", JSON.stringify(response.data.user));
