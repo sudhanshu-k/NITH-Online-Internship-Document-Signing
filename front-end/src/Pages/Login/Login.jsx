@@ -13,47 +13,52 @@ import { Check } from "@mui/icons-material";
 
 function Login() {
 	const { userState, setUserState, setAccesstoken } = useContext(AppContext);
-
+  
 	let schema = yup.object().shape({
-		email: yup.string().email().required(),
-		password: yup.string().min(5).required(),
+	  email: yup.string().email().required(),
+	  password: yup.string().min(5).required(),
 	});
-
+  
 	const {
-		register,
-		handleSubmit,
-		formState: { errors },
+	  register,
+	  handleSubmit,
+	  formState: { errors },
 	} = useForm({ resolver: yupResolver(schema) });
-
+  
 	const navigate = useNavigate();
-	const [selected, setSelected] = React.useState(false);
-
+	const [selected, setSelected] = useState(false);
+  
 	const onSubmit = (data) => {
-		console.log("Submitted");
-		var responseGet = {};
-		axios
-			.post("http://127.0.0.1:3000/api/auth/signin", data, {
-				withCredentials: true,
-				credential: "include",
-			})
-			.then(function (response) {
-				responseGet = response;
-				// console.log(responseGet.data);
-				setUserState(responseGet.data.user);
-				if (responseGet.status == 200) {
-					setUserState(responseGet.data.user);
-					// console.log(responseGet.data.user.isfaculty);
-					if (responseGet.data.user.isfaculty == true) {
-						navigate("/dashboard-ty");
-					} else {
-						navigate("/dashboard-st");
-					}
-				}
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	};
+	  console.log("Submitted");
+	  axios
+		.post("http://127.0.0.1:3000/api/auth/signin", data, {
+		  withCredentials: true,
+		  credential: "include",
+		})
+		.then(function (response) {
+				console.log(response)
+		  if (response.status == 200) {
+			console.log(response.data.user);
+			// setAccesstoken(response.data.data.access_token);
+			setUserState(response.data.user);
+			localStorage.setItem(
+			  "userState",
+			  JSON.stringify(response.data.user)
+			);
+			if (selected) {
+			  navigate("/dashboard-ty");
+			} else {
+				navigate("/dashboard-st");
+			}
+			// console.log(userState);
+		} else {
+			alert("Something Went Wrong");
+		}
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
+  };
 
 	return (
 		<StylesProvider>
