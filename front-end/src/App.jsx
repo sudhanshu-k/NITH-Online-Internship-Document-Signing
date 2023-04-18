@@ -3,9 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import StudentDashboard from "./Pages/Student Dashboard/StudentDashboard";
 import Sidebar from "./Components/Sidebar/Sidebar";
-
 import StudentProfile from "./Pages/Student Profile/StudentProfile";
-import Login from "./Pages/Login/Login";
 import { useState, useEffect, createContext } from "react";
 import Setup from "./Pages/Login/Setup";
 import TeacherDashboard from "./Pages/Teacher Dashboard/TeacherDashboard";

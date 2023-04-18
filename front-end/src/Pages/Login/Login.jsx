@@ -58,8 +58,7 @@ function Login() {
 	.catch(function (error) {
 		console.log(error);
 	});
-
-	};
+  };
 
 	return (
 		<StylesProvider>

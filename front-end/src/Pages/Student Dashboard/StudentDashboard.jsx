@@ -8,19 +8,9 @@ import axios from "axios";
 function StudentDashboard() {
 	const { accesstoken } = useContext(AppContext);
 	useEffect(() => {
-		async function fetchDashboardData() {
-			try {
-				const response = await axios.get("http://127.0.0.1:3000/api/profile/dashboard", {
-					withCredentials: true,
-					credentials: "include",
-				});
-				console.log(response);
-			} catch (error) {
-				console.error(error);
-			}
-		}
-
-		fetchDashboardData();
+		axios.get("http://127.0.0.1:3000/api/profile/dashboard").then(function (response) {
+			console.log(response);
+		});
 	}, []);
 
 	return (

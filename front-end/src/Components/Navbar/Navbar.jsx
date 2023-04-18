@@ -17,7 +17,7 @@ const Navbar = () => {
 				<div className="navbar-profile">
 					{userState.firstname != "" ? (
 						<Link className="profile-container" to={"/profile-st"}>
-							<p className="account-name">{userState.firstname}</p>
+							<p className="account-name">{userState.firstname + " " + userState.lastname}</p>
 						</Link>
 					) : (
 						<Link className="profile-container" to={"/"}>
