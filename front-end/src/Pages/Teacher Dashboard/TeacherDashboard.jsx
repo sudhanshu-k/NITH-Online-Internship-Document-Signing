@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UgIntern from "../Forms/UG Training Request Form/UgInten";
 import styles from "./TeacherDashboard.module.css";
+import axios from "axios";
 
 function TeacherDashboard() {
+	useEffect(() => {
+		axios.get("http://127.0.0.1:3000/api/profile/dashboard");
+	}, []);
+
 	const data = {
 		name: "Kshitij Roodkee",
 		fname: "ASDH",

@@ -30,24 +30,24 @@ function Login() {
 
 	const onSubmit = (data) => {
 		console.log("Submitted");
+		var responseGet = {};
 		axios
 			.post("http://127.0.0.1:3000/api/auth/signin", data, {
 				withCredentials: true,
 				credential: "include",
 			})
 			.then(function (response) {
-				if (response.status == 200) {
-					console.log(response.data.user);
-					// setAccesstoken(response.data.data.access_token);
-					setUserState(response.data.user);
-					if (selected) {
+				responseGet = response;
+				// console.log(responseGet.data);
+				setUserState(responseGet.data.user);
+				if (responseGet.status == 200) {
+					setUserState(responseGet.data.user);
+					// console.log(responseGet.data.user.isfaculty);
+					if (responseGet.data.user.isfaculty == true) {
 						navigate("/dashboard-ty");
 					} else {
 						navigate("/dashboard-st");
 					}
-					// console.log(userState);
-				} else {
-					alert("Something Went Wrong");
 				}
 			})
 			.catch(function (error) {
