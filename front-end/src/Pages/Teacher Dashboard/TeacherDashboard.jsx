@@ -5,7 +5,20 @@ import axios from "axios";
 
 function TeacherDashboard() {
 	useEffect(() => {
-		axios.get("http://127.0.0.1:3000/api/profile/dashboard");
+		axios({
+			method: "get",
+			url: "http://localhost:3000/api/profile/dashboard",
+			withCredentials: true,
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, []);
 
 	const data = {
@@ -34,7 +47,7 @@ function TeacherDashboard() {
 		<div className={styles.tyBody}>
 			{forms.map((form) => {
 				return (
-					<div className={styles.formTab}>
+					<div className={styles.formTab} key={form.user.roll}>
 						<div className={styles.formTabChild}> {form.uuid}</div>
 						<div className={styles.formTabChild}> {form.type}</div>
 						<div className={styles.formTabChild}> {form.user.name}</div>
