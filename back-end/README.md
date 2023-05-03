@@ -50,3 +50,6 @@ e
         go run dev/go run main.go 
 
 That's it! You can now have the app running locally on your machine.
+
+TODO: Use uber fx!
+more routes needed! and better file structure.
