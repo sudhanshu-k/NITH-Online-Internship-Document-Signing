@@ -6,13 +6,16 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
+
 	// "github.com/gofiber/fiber/v2/middleware/proxy"
 	"github.com/google/uuid"
+
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
 
 func PostUgIntern(c *fiber.Ctx) error {
@@ -21,7 +24,14 @@ func PostUgIntern(c *fiber.Ctx) error {
 	getAllForms := "select idform1 from user_to_form where iduser=$1"
 
 	rows, _ := database.DB.Query(context.Background(), getAllForms, user.ID.String())
-	utils.FatalError(rows.Err())
+	if rows.Err() != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
+
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
+	}
 
 	if rows.Next() {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "failed", "message": "Form already filled."})
@@ -43,6 +53,8 @@ func PostUgIntern(c *fiber.Ctx) error {
 		uuidForm, time.Now(), time.Now(), formData.Email)
 
 	if err != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(err))
+
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":    404,
 			"message": "Server Error",
@@ -56,21 +68,25 @@ func PostUgIntern(c *fiber.Ctx) error {
 	_, err = database.DB.Exec(context.TODO(), insertQuery, user.ID.String(), uuidForm.String())
 
 	if err != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(err))
+
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":    404,
 			"message": "Server Error",
 		})
 	}
 
-	rows, _=database.DB.Query(context.TODO(), `select iduser from faculty where level='assistant_professor'`)
+	rows, _ = database.DB.Query(context.TODO(), `select iduser from faculty where level='assistant_professor'`)
 	var facultyID uuid.UUID
-	if rows.Next(){
+	if rows.Next() {
 		rows.Scan(&facultyID)
 	}
 	insertQuery = "insert into form_to_faculty values($1, $2)"
 	res, err = database.DB.Exec(context.TODO(), insertQuery, facultyID, uuidForm)
 
 	if err != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(err))
+
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":    404,
 			"message": "Server Error",

@@ -7,8 +7,10 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
+
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/config"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/initializers"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
@@ -18,9 +20,6 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	authorization := c.Get("Authorization")
 
 	if strings.HasPrefix(authorization, "Bearer ") {
-
-		// fmt.Print(access_token + "sdf")
-
 		access_token = strings.TrimPrefix(authorization, "Bearer ")
 	} else if c.Cookies("access_token") != "" {
 		access_token = c.Cookies("access_token")
@@ -30,25 +29,28 @@ func AuthenticateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "fail", "message": "You are not logged in"})
 	}
 
-	config, _ := initializers.LoadConfig(".")
-
-	tokenClaims, err := utils.ValidateToken(access_token, config.AccessTokenPublicKey)
+	tokenClaims, err := utils.ValidateToken(access_token, config.Config.AccessTokenPublicKey)
 	if err != nil {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
 	}
 
 	ctx := context.TODO()
-	ID, err := initializers.RedisClient.Get(ctx, tokenClaims.TokenUuid).Result()
+	ID, err := database.RedisClient.Get(ctx, tokenClaims.TokenUuid).Result()
 	if err == redis.Nil {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "Token is invalid or session has expired"})
 	}
-	// fmt.Print(ID)
 
 	var user model.User
 	fetchUserQuery := `select id, first_name, last_name, email, "isFaculty" from users where id=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, ID)
-	utils.FatalError(rows.Err())
-	// fmt.Println("here")
+	if rows.Err() != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
+
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
+	}
 
 	if !rows.Next() {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "the user belonging to this token no logger exists"})
@@ -61,6 +63,15 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	if user.IsFaculty {
 		fetchTeacherQuery := `select level from faculty where iduser=$1`
 		rows, _ = database.DB.Query(context.Background(), fetchTeacherQuery, userDetails.ID)
+		if rows.Err() != nil {
+			utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
+
+			return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+				"code":    404,
+				"message": "Server Error",
+			})
+		}
+
 		if !rows.Next() {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "fail", "message": "Couldn't find entry in corresponding faculty table."})
 		} else {
@@ -71,6 +82,5 @@ func AuthenticateUser(c *fiber.Ctx) error {
 	c.Locals("user", userDetails)
 	c.Locals("access_token_uuid", tokenClaims.TokenUuid)
 
-	// fmt.Printf("here")
 	return c.Next()
 }

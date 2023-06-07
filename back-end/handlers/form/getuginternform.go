@@ -8,10 +8,12 @@ import (
 	// "github.com/gofiber/fiber/v2/middleware/proxy"
 	"github.com/google/uuid"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+	"go.uber.org/zap"
 
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
-	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
 
 func GetUgIntern(c *fiber.Ctx) error {
@@ -20,7 +22,14 @@ func GetUgIntern(c *fiber.Ctx) error {
 	getAllForms := "select idform1 from user_to_form where iduser=$1"
 
 	rows, _ := database.DB.Query(context.Background(), getAllForms, user.ID.String())
-	utils.FatalError(rows.Err())
+	if rows.Err() != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
+
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
+	}
 
 	if !rows.Next() {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "failed", "message": "Form not filled."})
@@ -53,8 +62,8 @@ func GetUgIntern(c *fiber.Ctx) error {
 		&data.ID, &data.CreatedAt, &data.UpdatedAt, &data.Email)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"code":    200,
-		"message": "sucess",
+		"code":     200,
+		"message":  "sucess",
 		"formData": data,
 	})
 }

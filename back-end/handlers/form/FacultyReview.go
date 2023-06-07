@@ -9,6 +9,8 @@ import (
 	// "github.com/gofiber/fiber/v2/middleware/proxy"
 	// "github.com/google/uuid"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+	"go.uber.org/zap"
 
 	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
@@ -18,16 +20,17 @@ import (
 func GetForm(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.UserResponse)
 
-	if !user.IsFaculty{
+	if !user.IsFaculty {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "failed", "message": "Faculty only route."})
 	}
 	selectQuery := `SELECT name, father_name, address, contact, companyname, areaofintern, "isOffline", "startDay", 
 		"endDate", weeks, fromtpo, stipend, formdate, "remakrsDeptt", "remarksFI", id, created_at, updated_at, 
 		email from uginternform where id=$1`
 
-	rows, err := database.DB.Query(context.TODO(), selectQuery, c.Params("formID"))
+	rows, _ := database.DB.Query(context.TODO(), selectQuery, c.Params("formID"))
+	if rows.Err() != nil {
+		utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
 
-	if err != nil {
 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"code":    404,
 			"message": "Server Error",
@@ -45,8 +48,8 @@ func GetForm(c *fiber.Ctx) error {
 		&data.ID, &data.CreatedAt, &data.UpdatedAt, &data.Email)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"code":    200,
-		"message": "sucess",
+		"code":     200,
+		"message":  "sucess",
 		"formData": data,
 	})
 }

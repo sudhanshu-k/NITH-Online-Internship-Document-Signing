@@ -5,19 +5,20 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
+
 	// "github.com/google/uuid"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/database"
 
-	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/middleware"
 	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/model"
-	// "github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
+	"github.com/sudhanshu-k/NITH-Online-Internship-Document-Signing/tree/main/back-end/utils"
 )
 
 func GetRejected(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.UserResponse)
 
 	if !user.IsFaculty {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "failed", "message": "Not faculty."})
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "failed", "message": "Not faculty."})
 	}
 
 	getAllForms := `select idform1, name, email
@@ -26,9 +27,8 @@ func GetRejected(c *fiber.Ctx) error {
 			form_to_faculty.iduser=$1 and status=$2;`
 
 	rows, err := database.DB.Query(context.Background(), getAllForms, user.ID.String(), "Rejected")
-	// utils.FatalError(rows.Err())
-
 	if err != nil {
+		utils.Logger.Error("database error", zap.Error(err))
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "failed", "message": "DB Error."})
 	}
 

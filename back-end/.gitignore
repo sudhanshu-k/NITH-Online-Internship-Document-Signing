@@ -3,3 +3,6 @@
 
 #schema
 create_db_schema.sql
+
+go.sum
+./tmp
