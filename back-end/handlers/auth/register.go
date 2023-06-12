@@ -22,6 +22,12 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(json.Password)<8{
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Length of password should be atleast 8.",
+		})
+	}
 	json.Password = utils.HashAndSalt([]byte(json.Password))
 	err := checkmail.ValidateFormat(json.Email)
 	if err != nil {

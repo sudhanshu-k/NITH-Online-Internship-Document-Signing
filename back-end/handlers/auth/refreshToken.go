@@ -15,59 +15,60 @@ import (
 )
 
 func RefreshAccessToken(c *fiber.Ctx) error {
-	message := "could not refresh access token"
-	serverError := c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-		"code":    404,
-		"message": "Server Error",
-	})
-
 	refresh_token := c.Cookies("refresh_token")
 	if refresh_token == "" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": message})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "failed", "message": "refresh_token not found."})
 	}
 
 	ctx := context.TODO()
 
 	tokenClaims, err := utils.ValidateToken(refresh_token, config.Config.RefreshTokenPublicKey)
 	if err != nil {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "failed", "message": err.Error()})
 	}
 
 	userid, err := database.RedisClient.Get(ctx, tokenClaims.TokenUuid).Result()
 	if err == redis.Nil {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": message})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "failed", "message": "You are not logged in."})
 	} else if err != nil {
 		utils.Logger.Error("Reddis query execution resulted in error.", zap.Error(err))
-		return serverError
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
 	}
 
 	var user model.User
-
 	fetchUserQuery := `select id from users where id=$1`
 	rows, _ := database.DB.Query(context.Background(), fetchUserQuery, userid)
 	if rows.Err() != nil {
 		utils.Logger.Error("Database query execution resulted in error.", zap.Error(rows.Err()))
-		return serverError
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
 	}
 
 	if !rows.Next() {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "fail", "message": "User doesnot exist."})
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"status": "failed", "message": "User does not exist."})
 	}
 	rows.Scan(&user.ID)
 
 	accessTokenDetails, err := utils.CreateToken(user.ID.String(), config.Config.AccessTokenExpiresIn, config.Config.AccessTokenPrivateKey)
 	if err != nil {
-		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": err.Error()})
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "failed", "message": err.Error()})
 	}
 
 	now := time.Now()
-
-	errAccess := database.RedisClient.Set(ctx, accessTokenDetails.TokenUuid, user.ID.String(), time.Unix(*accessTokenDetails.ExpiresIn, 0).Sub(now)).Err()
-	if errAccess != nil {
-		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"status": "fail", "message": errAccess.Error()})
+	err = database.RedisClient.Set(ctx, accessTokenDetails.TokenUuid, user.ID.String(), time.Unix(*accessTokenDetails.ExpiresIn, 0).Sub(now)).Err()
+	if err != nil {
+		utils.Logger.Error("Reddis query execution resulted in error.", zap.Error(err))
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+			"code":    404,
+			"message": "Server Error",
+		})
 	}
 
-	// println(*accessTokenDetails.Token)
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    *accessTokenDetails.Token,
