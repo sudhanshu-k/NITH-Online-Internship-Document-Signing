@@ -6,7 +6,7 @@ Welcome to the app! To get started, you'll need to follow these steps to set up 
 
 Before you get started, you'll need to make sure you have the following installed on your machine:
 e
-- GoLAng (version 20.2 or later)
+- GOLAng (version 20.2 or later)
 
 ## Installation
 
@@ -24,25 +24,7 @@ e
         
 5. Setup .env file:
         
-        path: ./back-end
-        
-        Format:
-        ```.env
-        PORT=:x
-
-        DATABASE_URL=[postgress]
-
-        REDIS_URL=
-
-        ACCESS_TOKEN_PRIVATE_KEY=
-        ACCESS_TOKEN_PUBLIC_KEY=
-        ACCESS_TOKEN_EXPIRED_IN=15m
-        ACCESS_TOKEN_MAXAGE=15
-
-        REFRESH_TOKEN_PRIVATE_KEY=
-        REFRESH_TOKEN_PUBLIC_KEY=
-        REFRESH_TOKEN_EXPIRED_IN=60m
-        REFRESH_TOKEN_MAXAGE=60
+       Change example.env name to .env and fill in after '='.
         
 
 4. Start the development server:
